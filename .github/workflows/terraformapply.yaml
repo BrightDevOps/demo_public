@@ -9,7 +9,7 @@ on:
             -main
 
 jobs:
-    terraform_plan: #this specifies the name of the job
+    terraform_apply: #this specifies the name of the job
         runs-on: ubuntu-latest
         steps: #secifies the commands github actions should exercute on the runner
             -   name: clone repo on runner
