@@ -1,0 +1,37 @@
+#This workflow would trigger github actions anytime there is a pull request made to the main branch.
+
+name: pull request for terraform plan
+
+# the below would trigger github actions to run when there is a pull request made to the main branch.
+on:
+    merge:
+        branches:
+            -main
+
+jobs:
+    terraform_apply: #this specifies the name of the job
+        runs-on: ubuntu-latest
+        steps: #secifies the commands github actions should exercute on the runner
+            -   name: clone repo on runner
+                uses: actions/checkout@v4  # This action would have github actions clone the code fromt he repo into the runner (server).
+
+            -   name: setup terraform
+                uses: hashicorp/setup-terraform@v3 # This action would download and setup the latest version of terraform on the runner
+
+            -   name: setup aws cli
+                uses: aws-actions/configure-aws-credentials@v4
+                with: 
+                    aws-region: "us-east-1"
+                    #For secrets such as access and secret access keys, we will make use of github secrets.
+                    #The secret once created, its content can never be seen again. It is only seen at the time of creation by the creator.
+                    aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
+                    aws-secret-access-key: ${{secrets.AWS_SECRET_KEY}}
+            
+            -   name: Terraform init
+                run: terraform init
+            -   name: Plan
+                run: terraform plan
+            -   name: apply
+                run: terraform apply --auto-approve
+
+                
