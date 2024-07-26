@@ -4,7 +4,7 @@ name: pull request for terraform plan
 
 # the below would trigger github actions to run when there is a pull request made to the main branch.
 on:
-    merge:
+    push:
         branches:
             -main
 
@@ -34,4 +34,3 @@ jobs:
             -   name: apply
                 run: terraform apply --auto-approve
 
-                
